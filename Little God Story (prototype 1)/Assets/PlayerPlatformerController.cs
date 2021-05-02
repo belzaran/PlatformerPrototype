@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerPlatformerController : PhysicsObject
 {
-    public float maxSpeed = 7;
-    public float moveSpeed = 200;
+    public float runSpeed = 7;
     public float jumpSpeed = 7;
-    public float airControl = 1;
+    public float airControl = 0.5f;
 
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -30,10 +29,17 @@ public class PlayerPlatformerController : PhysicsObject
             move.x = Input.GetAxis("Horizontal");
         }
         else{
-            move.x = velocity.x/maxSpeed;
+            move.x = velocity.x/runSpeed + (Input.GetAxis("Horizontal"))*airControl;
+            Debug.Log("move.x :" + move.x);
+    
+            if(move.x > 1){
+                move.x = 1;               
+            }
+            else if (move.x < -1){
+                move.x = -1;
+            }
         }
         
-        //Debug.Log(move.x);
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -53,7 +59,7 @@ public class PlayerPlatformerController : PhysicsObject
             
         }
 
-            targetVelocity = move * maxSpeed;
+            targetVelocity = move * runSpeed;
         
     }
 
